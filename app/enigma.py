@@ -1,17 +1,17 @@
+# Script      : enigma.py
+# Description : Puzzle game using CrowPi
+# Author      : DOMINGUES PEDROSA Samuel
+# Date        : 2022.29.09, V1.0
 import pygame
 import RPi.GPIO as GPIO
 
+# Initialize Pygame screen
 pygame.init()
-
-CODE = 'UUDDLRLR'
-print(CODE[0])
-
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
-COLOR_OFF = (0, 150, 0)
-COLOR_ON = (0, 255, 0)
-
+# Initialize d-pad
 PIN_LEFT = 25
 PIN_DOWN = 13
 PIN_UP = 26
@@ -22,18 +22,22 @@ GPIO.setup(PIN_LEFT, GPIO.IN)
 GPIO.setup(PIN_DOWN, GPIO.IN)
 GPIO.setup(PIN_UP, GPIO.IN)
 GPIO.setup(PIN_RIGHT, GPIO.IN)
-screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+COLOR_OFF = (0, 150, 0)
+COLOR_ON = (0, 255, 0)
 
 down_color = COLOR_OFF
 left_color = COLOR_OFF
 right_color = COLOR_OFF
 up_color = COLOR_OFF
-pressed = True
-guess = ''
+
+pressed = True # Block the code from continusly reading an input
  
-running = True
+# First puzzle : reproduse a code on the d-pad
+guess = ''
 def d_pad_code():
-    global pressed, guess
+    CODE = 'UUDDLRLR'
+    global pressed, guess # Global so they don't reset every time the function is called
     solved = False
     left_color = COLOR_ON if not GPIO.input(PIN_LEFT) else COLOR_OFF    
     down_color = COLOR_ON if not GPIO.input(PIN_DOWN) else COLOR_OFF    
@@ -62,8 +66,11 @@ def d_pad_code():
     pygame.draw.circle(screen, right_color, (400, 250), 75)
     
     return solved
-    
+
+# Get out of the loop when the game is finished
+running = True
 while running:
+    # Close the game when the event is triggered
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -72,6 +79,6 @@ while running:
         running = False
             
     pygame.display.flip()
-    
-GPIO.cleanup()
+
+GPIO.cleanup() # Reset the GPIO
 pygame.quit()
