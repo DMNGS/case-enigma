@@ -2,17 +2,12 @@ import pygame
 import RPi.GPIO as GPIO
 import time
 
+# Initialize Pygame screen
 pygame.init()
-
-CODE = 'UUDDLRLR'
-print(CODE[0])
-
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
-COLOR_OFF = (0, 150, 0)
-COLOR_ON = (0, 255, 0)
-
+# Initialize d-pad
 PIN_LEFT = 25
 PIN_DOWN = 13
 PIN_UP = 26
@@ -42,7 +37,8 @@ level = 0
 running = True
 # Level 1 : Make a code with the D-pad on the bottom right of the CrowPi 
 def d_pad_code():
-    global pressed, guess
+    CODE = 'UUDDLRLR'
+    global pressed, guess # Global so they don't reset every time the function is called
     solved = False
     left_color = COLOR_ON if not GPIO.input(PIN_LEFT) else COLOR_OFF    
     down_color = COLOR_ON if not GPIO.input(PIN_DOWN) else COLOR_OFF    
@@ -112,6 +108,7 @@ def distance():
     return right_dist
     
 while running:
+    # Close the game when the event is triggered
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
