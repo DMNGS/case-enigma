@@ -32,3 +32,33 @@ Je pense savoir où est le problème, j'ai passé la variable en local mais main
 J'ai trouvé la solûtion. Je devais juste déclarer que ces variables étaient globales au début de la fonction.
 
 J'ai essayé d'exécuter le script de démo de la matrice LED, mais même après avoir installé les librairies qui faut, il n'arrive pas à utiliser le SPI pour communiquer avec la matrice.
+
+## 2022.11.03
+Aujourd'hui mon objectif est de créer une énigme ou il faut crier au bon volume.
+
+En regrdant j'ai vu que à partir de Python 3.10, le language possède un équivalant au switch case avec match, mais la version de Raspberry Pi OS est encore en 3.9.2, donc je vais plutôt utiliser les elif en cascade.
+
+J'abandone l'idée du micro car les GPIO ne sont que digitale. A la place j'aurais une énigme qui utilise le capteur de distance.
+![Le capteur de distance à ultrason](./img/capt-dist.jpg){: style="height:300px"}
+
+J'ai pu afficher du text avec pygame. C'est facile mais il y a un peu de boilerplate code. Il faut créer un objet pour la police, puis pour le texte et un rectangle pour le texte.
+
+``` python
+font = pygame.font.sysFont('freesansbold.ttf', 32) # Initialiser la police
+text = font.Render('Vies : 3', True, (0, 0, 0)) # Créer l'objet texte
+text_rect = text.get_rect() # Obtenir la boîte pour afficher le texte
+screen.blit(text, text_rect) # Afficher le texte
+```
+
+En essayent de push les changements d'aujourd'hui je me rends compte que j'ai oublié de pull avant de commencer et j'ai un conflict que j'ai besoind de résoudre.
+
+## 2022.11.10
+Honnêtement résoudre un conflict avec Vim était plutôt simple.
+
+Aujourd'hui, mon objectif est de créer une troisième voir une quatrième énigme.
+
+Pour ma troisième énigme, je pensait à devoir écrire un message en Morse avec le détecteur de touché.
+
+![détecteur de touché](./img/capt-touch.jpg){: style="height:300px"}
+
+J'ai un peu modifié le code de la deuxième énigme pour affiche un vague message qui dit si on est trop haut ou trop bas au lieu de la distance elle même.
