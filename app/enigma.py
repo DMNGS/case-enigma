@@ -12,8 +12,9 @@ PIN_LEFT = 25
 PIN_DOWN = 13
 PIN_UP = 26
 PIN_RIGHT = 19
-TRIG = 16
-ECHO = 12
+PIN_TRIG = 16
+PIN_ECHO = 12
+PIN_TOUCH = 17
 
 # Setup GPIO PINs
 GPIO.setmode(GPIO.BCM)
@@ -21,8 +22,9 @@ GPIO.setup(PIN_LEFT, GPIO.IN)
 GPIO.setup(PIN_DOWN, GPIO.IN)
 GPIO.setup(PIN_UP, GPIO.IN)
 GPIO.setup(PIN_RIGHT, GPIO.IN)
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
+GPIO.setup(PIN_TRIG,GPIO.OUT)
+GPIO.setup(PIN_ECHO,GPIO.IN)
+GPIO.setup(PIN_TOUCH, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Setup Display and main font
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
@@ -31,8 +33,19 @@ font = pygame.font.SysFont('freesansbold.ttf', 32)
 # Global variables
 pressed = True
 guess = ''
+elapsed = 0
 
-level = 0
+level = 1
+
+# Verifies if the guess is correct compared to the code
+def check_guess(inp, code):
+    print(code)
+    print(inp)
+    if (len(inp) > 0 and inp[len(inp)-1] != code[len(inp)-1])\
+       or guess == code:
+        return False
+    else:
+        return True
 
 # Level 1 : Make a code with the D-pad on the bottom right of the CrowPi 
 def d_pad_code():
@@ -63,8 +76,8 @@ def d_pad_code():
         solved = True
     
     # Make player try again or clean variables for future use
-    if (len(guess) > 0 and guess[len(guess)-1] != CODE[len(guess)-1])\
-       or guess == CODE:
+    print(guess)
+    if not check_guess(guess, CODE):
         guess = ''
         pressed = False
     
@@ -79,7 +92,7 @@ def d_pad_code():
 
 # Level 2 : Put your hand at the right distance form the sensor
 def distance():
-    GOAL_DIST = 25
+    GOAL_DIST = 15
     DELTA = 1
     TEXT_TOO_HIGH = 'Too high'
     TEXT_TOO_LOW = 'Too low'
@@ -88,23 +101,23 @@ def distance():
     right_dist = False
     
     # Wait for sensor to settle
-    GPIO.output(TRIG, False)
+    GPIO.output(PIN_TRIG, False)
     time.sleep(2)
 
-    GPIO.output(TRIG, True)
+    GPIO.output(PIN_TRIG, True)
     time.sleep(0.00001)
-    GPIO.output(TRIG, False)
+    GPIO.output(PIN_TRIG, False)
         
-    while GPIO.input(ECHO) == 0:
+    while GPIO.input(PIN_ECHO) == 0:
         pulse_start = time.time()
 
-    while GPIO.input(ECHO) == 1:
+    while GPIO.input(PIN_ECHO) == 1:
         pulse_end = time.time()
 
     pulse_duration = pulse_end - pulse_start
     dist = pulse_duration * 17150
     dist = round(dist, 2)
-    # print(dist)
+    print(dist)
     
     # Check if the sensor gives the right value
     # and choose the text accordingly
@@ -127,8 +140,59 @@ def distance():
         
     return right_dist
 
+# Level 3 : make a morse code using the touch sensor
 def morse_code():
-    return False
+    global guess
+    guessed = False
+    CODE='ssslllsss'
+    DOT_TIME = 200
+    DASH_TIME = 700
+    DELTA = 100
+    global elapsed
+    
+    if elapsed > 0:
+        print(elapsed)
+        if elapsed < DOT_TIME + DELTA\
+           and elapsed > DOT_TIME > DOT_TIME - DELTA:
+            guess += 's'
+        elif elapsed > DOT_TIME > DOT_TIME - DELTA:
+            guess += 'l'
+            
+        if guess == CODE:
+            guessed = True
+            
+        if not check_guess(guess, CODE):
+            guess = ''
+            print(guess)
+            
+        elapsed = 0
+    
+    # Draw graphics
+    screen.fill((255, 255, 255))
+    # Create the object and rectangle for the text
+    text_obj = font.render("TODO", True, (0, 0, 0 ))
+    text_rect = text_obj.get_rect();
+    text_rect.center = (250, 250)
+    
+    # Display the text
+    screen.fill((255, 255, 255))
+    screen.blit(text_obj, text_rect)
+    
+    return guessed
+
+# Callback for the sensor to have accurate mesurment
+def morse_callback(channel):
+    if level == 3:
+        global start, end, elapsed
+        
+        if GPIO.input(PIN_TOUCH) == 1:
+            start = time.time()
+        if GPIO.input(PIN_TOUCH) == 0:
+            end = time.time()
+            elapsed = (end - start) * 1000 # Measure in [ms] instead of [s]
+            
+# Add event detector for the touch sensor
+GPIO.add_event_detect(PIN_TOUCH, GPIO.BOTH, callback=morse_callback, bouncetime=200)
     
 # Main game loop
 running = True
@@ -138,14 +202,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    if level == 0:
+    if level == 1:
         if d_pad_code():
-            level = 1
-    elif level == 1:
-        if distance():
             level = 2
+    elif level == 2:
+        if distance():
+            level = 3
     elif level == 3:
-        if True:
+        if morse_code():
             level = 4
     else:
         running = False
