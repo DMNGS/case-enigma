@@ -62,3 +62,21 @@ Pour ma troisième énigme, je pensait à devoir écrire un message en Morse ave
 ![détecteur de touché](./img/capt-touch.jpg){: style="height:300px"}
 
 J'ai un peu modifié le code de la deuxième énigme pour affiche un vague message qui dit si on est trop haut ou trop bas au lieu de la distance elle même.
+
+# 2022.11.17
+J'ai un peut regarder comment calculer un interval de temps qu'un bouton est préssé, et quand je rajoute un bool pour ne pas innoder la console, ça me mets des résultats incorrectes.
+
+J'ai mis le code dans un callback et ça fonctionne
+
+J'ai un peut regarder comment calculer un interval de temps qu'un bouton est préssé, et quand je rajoute un bool pour ne pas innoder la console, ça me mets des résultats incorrectes.
+
+J'ai mis le code dans un callback et ça fonctionne
+
+# 2022.11.19
+Vu que je doix vérifier deux chaînes de la même manière, j'ai mis le code dans une fonction séparée.
+
+Pour gérer le callback, j'ai mis la variable en globale que je vérifie pour voir si la valeur est supérieure à 0, puis je regarde la durée pour déterminer si c'est un cours (.) ou un long (-)
+
+Quand je fait un long, il est reconnu mais quand je fait un cours, il ne se passe rien.
+
+J'avais mis un temps pas asssez intuitif pour un cours
