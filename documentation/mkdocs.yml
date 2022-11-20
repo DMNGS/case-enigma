@@ -1,6 +1,11 @@
 site_name: Case Enigma Documentation
+site_author: DOMINGUES PEDROSA Samuel
+
+plugins:
+    - with-pdf
 
 markdown_extensions:
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
