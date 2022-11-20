@@ -10,6 +10,7 @@ import time
 
 # Initialize Pygame screen
 pygame.init()
+pygame.display.set_caption('Authentificator')
 # Setup Display and main font
 screen = pygame.display.set_mode((600, 550))
 font = pygame.font.SysFont('freesansbold.ttf', 32)
