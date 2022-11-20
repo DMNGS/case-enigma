@@ -98,7 +98,7 @@ def d_pad_code():
     
     # Display text
     text_question = font.render('Layer 1 : ' + TEXT_QUESTION, True, (0, 0, 0))
-    question_rect = text_question.get_rect();
+    question_rect = text_question.get_rect()
     question_rect.center = (230, 25)
     # Display the text
     screen.blit(text_question, question_rect)
@@ -106,7 +106,7 @@ def d_pad_code():
     # Display hint text
     if tries >= 4:
         text_question = font.render(TEXT_HINT, True, (0, 0, 0))
-        question_rect = text_question.get_rect();
+        question_rect = text_question.get_rect()
         question_rect.center = (230, 55)
         screen.blit(text_question, question_rect)
     
@@ -158,7 +158,7 @@ def distance():
     
     # Create the object and rectangle for the text
     text_obj = font.render(text, True, (0, 0, 0))
-    text_rect = text_obj.get_rect();
+    text_rect = text_obj.get_rect()
     text_rect.center = (250, 250)
     # Display the text
     screen.fill((255, 255, 255))
@@ -166,14 +166,14 @@ def distance():
     
     # Question text
     text_question = font.render('Layer 2 : ' + TEXT_QUESTION, True, (0, 0, 0))
-    question_rect = text_question.get_rect();
+    question_rect = text_question.get_rect()
     question_rect.center = (250, 25)
     screen.blit(text_question, question_rect)
     
     # Display hint text
     if tries >= 7: # After 16 sec (closest to 15
         text_question = font.render(TEXT_HINT, True, (0, 0, 0))
-        question_rect = text_question.get_rect();
+        question_rect = text_question.get_rect()
         question_rect.center = (230, 55)
         screen.blit(text_question, question_rect)
         
@@ -212,21 +212,21 @@ def morse_code():
     screen.fill((255, 255, 255))
     # Create the object and rectangle for the text
     text_obj = font.render(guess, True, (0, 0, 0))
-    text_rect = text_obj.get_rect();
+    text_rect = text_obj.get_rect()
     text_rect.center = (250, 250)
     screen.fill((255, 255, 255))
     screen.blit(text_obj, text_rect)
     
     # Question text
     text_question = font.render('Layer 3 : ' + TEXT_QUESTION, True, (0, 0, 0))
-    question_rect = text_question.get_rect();
+    question_rect = text_question.get_rect()
     question_rect.center = (200, 25)
     screen.blit(text_question, question_rect)
     
     # Display hint text
     if tries >= 3:
         text_question = font.render(TEXT_HINT, True, (0, 0, 0))
-        question_rect = text_question.get_rect();
+        question_rect = text_question.get_rect()
         question_rect.center = (230, 55)
         screen.blit(text_question, question_rect)
     
@@ -253,11 +253,11 @@ def end_screen():
     text_2 = font.render('Information available:', True, (0, 0, 0))
     text_3 = font.render('None', True, (0, 0, 0))
     
-    rect_1 = text_1.get_rect();
+    rect_1 = text_1.get_rect()
     rect_1.center = (150, 25)
-    rect_2 = text_2.get_rect();
+    rect_2 = text_2.get_rect()
     rect_2.center = (125, 50)
-    rect_3 = text_3.get_rect();
+    rect_3 = text_3.get_rect()
     rect_3.center = (40, 100)
     
     screen.blit(text_1, rect_1)
